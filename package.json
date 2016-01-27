@@ -6,7 +6,7 @@
     "superagent": "1.7.2"
   },
   "scripts": {
-    "start": "index.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": "5"
