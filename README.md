@@ -3,6 +3,7 @@
 [![badginator](https://badginator.herokuapp.com/defunctzombie/badginator.svg)](https://github.com/defunctzombie/badginator)
 [![badginator](https://badginator.herokuapp.com/defunctzombie/badginator.svg)](https://github.com/defunctzombie/badginator)
 [![badginator](https://badginator.herokuapp.com/defunctzombie/badginator.svg)](https://github.com/defunctzombie/badginator)
+[![badginator](https://badginator.herokuapp.com/defunctzombie/badginator.svg)](https://github.com/defunctzombie/badginator)
 
 Some people like repo badges so this is a badge to count your repo badges.
 
