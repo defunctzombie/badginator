@@ -24,7 +24,7 @@ app.get('/:org/:repo.svg', function(req, res, next) {
             return next(err);
         }
 
-        var url = printf('https://img.shields.io/badge/badges-%d-organge.svg', badge_count);
+        var url = printf('https://img.shields.io/badge/badges-%d-orange.svg', badge_count);
         https.get(url, function(img_res) {
             res.set({
                 'content-type': img_res.headers['content-type'],
