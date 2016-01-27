@@ -6,6 +6,8 @@ var https = require('https');
 
 var app = express();
 
+app.set('x-powered-by', false);
+
 app.get('/', function(req, res, next) {
     res.redirect('https://github.com/defunctzombie/badginator');
 });
@@ -24,7 +26,10 @@ app.get('/:org/:repo.svg', function(req, res, next) {
 
         var url = printf('https://img.shields.io/badge/badges-%d-organge.svg', badge_count);
         https.get(url, function(img_res) {
-            res.set(img_res.headers);
+            res.set({
+                'content-type': img_res.headers['content-type'],
+                'cache-control': 'no-cache, no-store, must-revalidate',
+            });
             img_res.pipe(res);
         });
     });
