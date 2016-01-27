@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "async": "1.5.2",
+    "express": "4.13.4",
+    "printf": "0.2.3",
+    "superagent": "1.7.2"
+  },
+  "engines": {
+    "node": "5"
+  }
+}
