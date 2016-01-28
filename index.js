@@ -48,7 +48,7 @@ function count_readme_badges(opt, cb) {
 
         // count instances of [![](.svg or .png)]
         // followed by () which is a link
-        var regexp = /(\[[!]\[.*\]\(.*(.svg|.png).*\)\]\(.*\)|[!]\[.*\]\(.*(.svg|.png).*\))/g;
+        var regexp = /(\[[!]\[.*\]\(.*(\.svg|\.png).*\)\]\(.*\)|[!]\[.*\]\(.*(\.svg|\.png).*\))/g;
         var count = 0;
         while(regexp.exec(readme) !== null) {
             count++;
