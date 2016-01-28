@@ -24,8 +24,23 @@ app.get('/:org/:repo.svg', function(req, res, next) {
             return next(err);
         }
 
-        var etag = badge_count + 'orange';
-        var url = printf('https://img.shields.io/badge/badges-%d-orange.svg', badge_count);
+        var color = 'red';
+
+        if (badge_count <= 2) {
+            color = 'red';
+        }
+        else if (badge_count <= 4) {
+            color = 'orange';
+        }
+        else if (badge_count <= 6) {
+            color = 'green';
+        }
+        else {
+            color = 'brightgreen';
+        }
+
+        var etag = badge_count + color;
+        var url = printf('https://img.shields.io/badge/badges-%d-%s.svg', badge_count, color);
         https.get(url, function(img_res) {
             res.set({
                 'content-type': img_res.headers['content-type'],
