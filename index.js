@@ -78,7 +78,7 @@ function fetch_readme(opt, cb) {
     var repo = opt.repo;
 
     var base_url = printf('https://raw.githubusercontent.com/%s/%s/master/', org, repo);
-    var readme_variants = ['README.md', 'readme.md', 'Readme.md', 'README.MD'];
+    var readme_variants = ['README.md', 'readme.md', 'Readme.md', 'README.MD', 'readme.markdown'];
     var readme_text = '';
 
     async.some(readme_variants, function(name, cb) {
