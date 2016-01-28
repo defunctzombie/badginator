@@ -21,9 +21,9 @@ Your badge color will reflect how many badges you have. The more badges you have
 
 | Badges | Color |
 | --- | --- |
-| <= 2 | ![](https://img.shields.io/badge/badges-2-red.svg) |
-| <= 4 | ![](https://img.shields.io/badge/badges-4-orange.svg) |
-| <= 6 | ![](https://img.shields.io/badge/badges-6-green.svg) |
+| ≤ 2 | ![](https://img.shields.io/badge/badges-2-red.svg) |
+| ≤ 4 | ![](https://img.shields.io/badge/badges-4-orange.svg) |
+| ≤ 6 | ![](https://img.shields.io/badge/badges-6-green.svg) |
 | > 6 | ![](https://img.shields.io/badge/badges-15-brightgreen.svg) |
 
 ## Toubleshooting
