@@ -1,8 +1,19 @@
-var express = require('express');
-var async = require('async');
-var request = require('superagent');
-var printf = require('printf');
-var https = require('https');
+const express = require('express');
+const async = require('async');
+const request = require('superagent');
+const printf = require('printf');
+const https = require('https');
+const marked = require('marked');
+const cheerio = require('cheerio');
+const redis = require('redis');
+const crypto = require('crypto');
+
+const url_is_badge = require('./lib/url_is_badge');
+
+var redisCache = redis.createClient(process.env.REDIS_URL);
+redisCache.on('error', function (err) {
+    console.error('Redis error:', err);
+});
 
 var app = express();
 
@@ -16,7 +27,27 @@ app.get('/:org/:repo.svg', function(req, res, next) {
     var org = req.params.org;
     var repo = req.params.repo;
 
-    count_readme_badges({
+    // if badginator request, serve up dummy badge
+    if (req.headers['badginator-request'] === 'sup dog') {
+        var url = printf('https://img.shields.io/badge/badges-dummy-green.svg');
+        https.get(url, function(img_res) {
+            res.set({
+                'content-type': img_res.headers['content-type'],
+                'cache-control': 'no-cache, no-store, must-revalidate',
+                'etag': etag,
+            });
+            img_res.pipe(res);
+        });
+        return;
+    }
+
+    var count_fn = regex_count_readme_badges;
+
+    if (req.query.image_analysis) {
+        count_fn = count_readme_badges;
+    }
+
+    count_fn({
         org: org,
         repo: repo,
     }, function(err, badge_count) {
@@ -52,7 +83,7 @@ app.get('/:org/:repo.svg', function(req, res, next) {
     });
 });
 
-function count_readme_badges(opt, cb) {
+function regex_count_readme_badges(opt, cb) {
     fetch_readme(opt, function(err, readme) {
         if (err) {
             return cb(err);
@@ -70,6 +101,64 @@ function count_readme_badges(opt, cb) {
         }
 
         cb(null, count);
+    });
+};
+
+function count_readme_badges(opt, cb) {
+    fetch_readme(opt, function(err, readme) {
+        if (err) {
+            return cb(err);
+        }
+
+        // process readme
+        var html = marked(readme);
+        var $ = cheerio.load(html);
+
+        var urls = $('img').map(function(idx, img) {
+            return $(img).attr('src');
+        }).get();
+
+        var count = 0;
+        async.each(urls, function(url, done) {
+            //async.reduce(urls, 0, function(count, url, done) {
+            // this is gnarly and could be a function now
+            var hash = crypto.createHash('md5').update(url).digest('hex');
+            var url_key = 'url-cache:' + hash;
+            redisCache.get(url_key, function(err, val) {
+                if (err) {
+                    console.error(err);
+                    return done();
+                }
+
+                // have cached value
+                if (val !== null) {
+                    count += (val === 'true' ? 1 : 0);
+                    // redis values are strings, yay
+                    //return done(null, count + (val === 'true' ? 1 : 0));
+                    return done();
+                }
+
+                url_is_badge(url, function(err, is_badge) {
+                    if (err) {
+                        console.error(err);
+                    }
+                    else {
+                        redisCache.setex(url_key, 60 * 15, is_badge, function(err) {
+                            if (err) {
+                                console.error(err);
+                            }
+                        });
+                    }
+
+                    count += (is_badge ? 1 : 0);
+                    done();
+                    //done(null, count + (is_badge ? 1 : 0));
+                });
+
+            });
+        }, function(err) {
+            cb(err, count);
+        });
     });
 }
 
