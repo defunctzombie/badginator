@@ -34,7 +34,6 @@ app.get('/:org/:repo.svg', function(req, res, next) {
             res.set({
                 'content-type': img_res.headers['content-type'],
                 'cache-control': 'no-cache, no-store, must-revalidate',
-                'etag': etag,
             });
             img_res.pipe(res);
         });
