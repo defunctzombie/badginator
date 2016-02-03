@@ -40,7 +40,7 @@ app.get('/:org/:repo.svg', function(req, res, next) {
         return;
     }
 
-    var count_fn = regex_count_readme_badges;
+    var count_fn = process.env.USE_REGEX_BADGES ? regex_count_readme_badges : count_readme_badges;
 
     if (req.query.image_analysis) {
         count_fn = count_readme_badges;
