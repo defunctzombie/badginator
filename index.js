@@ -72,6 +72,10 @@ app.get('/:org/:repo.svg', function(req, res, next) {
 
         var etag = badge_count + color;
         var url = printf('https://img.shields.io/badge/badges-%d-%s.svg', badge_count, color);
+        if (process.env.USE_REDIRECT_URL === '1') {
+            return res.redirect(url);
+        }
+
         https.get(url, function(img_res) {
             res.set({
                 'content-type': img_res.headers['content-type'],
