@@ -31,4 +31,4 @@ Your badge color will reflect how many badges you have. The more badges you have
 Why isn't my badge count correct?
 
 * Github README images are cached and the badge image has not updated. Give it some time.
-* or, There is a bug in our badge detection logic and you should [file an issue](https://github.com/defunctzombie/badginator/issues/new)# badge-test
+* or, There is a bug in our badge detection logic and you should [file an issue](https://github.com/defunctzombie/badginator/issues/new)
