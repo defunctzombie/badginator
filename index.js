@@ -70,7 +70,8 @@ app.get('/:org/:repo.svg', function(req, res, next) {
         }
 
         var etag = badge_count + color;
-        var url = printf('https://img.shields.io/badge/badges-%d-%s.svg', badge_count, color);
+        var style = req.query.style || 'flat';
+        var url = printf('https://img.shields.io/badge/badges-%d-%s.svg?style=%s', badge_count, color, style);
         if (process.env.USE_REDIRECT_URL === '1') {
             return res.redirect(url);
         }
