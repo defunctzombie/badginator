@@ -169,8 +169,9 @@ function count_readme_badges(opt, cb) {
 function fetch_readme(opt, cb) {
     var org = opt.org;
     var repo = opt.repo;
+    var url = printf('https://api.github.com/repos/%s/%s/readme',org,repo);
 
-    request.get('https://api.github.com/repos/'+opt.org+'/'+opt.repo+'/readme').end(function(err, res) {
+    request.get(url).end(function(err, res) {
         if (err) {
             return cb(false);
         }
