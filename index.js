@@ -169,27 +169,27 @@ function count_readme_badges(opt, cb) {
 function fetch_readme(opt, cb) {
     var org = opt.org;
     var repo = opt.repo;
+    var url = printf('https://api.github.com/repos/%s/%s/readme',org,repo);
 
-    var base_url = printf('https://raw.githubusercontent.com/%s/%s/master/', org, repo);
-    var readme_variants = ['README.md', 'readme.md', 'Readme.md', 'README.MD', 'readme.markdown'];
-    var readme_text = '';
+    request.get(url).end(function(err, res) {
+        if (err) {
+            return cb(false);
+        }
 
-    async.some(readme_variants, function(name, cb) {
-        var url = base_url + name;
-        request.get(url).end(function(err, res) {
-            if (err) {
+        if (res.status !== 200) {
+            return cb(false);
+        }
+
+        if (res.body.encoding) {
+            if (!Buffer.isEncoding(res.body.encoding)) {
                 return cb(false);
+            } else {
+                var text = Buffer.from(res.body.content, res.body.encoding).toString();
+                return cb(null, text);
             }
-
-            if (res.status !== 200) {
-                return cb(false);
-            }
-
-            readme_text = res.text;
-            cb(true);
-        });
-    }, function(found) {
-        cb(null, readme_text);
+        } else {
+            return cb(false);
+        }
     });
 }
 
