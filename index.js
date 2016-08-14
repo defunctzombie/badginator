@@ -180,11 +180,11 @@ function fetch_readme(opt, cb) {
         }
 
         if (res.body.encoding) {
-            try {
+            if (!Buffer.isEncoding(res.body.encoding)) {
+                return cb(false);
+            } else {
                 var text = Buffer.from(res.body.content, res.body.encoding).toString();
                 return cb(null, text);
-            } catch (e) {
-                return cb(false);
             }
         } else {
             return cb(false);
