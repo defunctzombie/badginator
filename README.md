@@ -26,7 +26,7 @@ Your badge color will reflect how many badges you have. The more badges you have
 | ≤ 6 | ![](https://img.shields.io/badge/badges-6-green.svg) |
 | > 6 | ![](https://img.shields.io/badge/badges-15-brightgreen.svg) |
 
-## Toubleshooting
+## Troubleshooting
 
 Why isn't my badge count correct?
 
